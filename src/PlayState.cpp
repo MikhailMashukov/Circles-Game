@@ -14,7 +14,7 @@ CPlayState::CPlayState(CStateManager* pManager)
    m_bGameOver(false)
 {
 	AddFontResource("01 Digitall.ttf");
-	m_pMatrix = new CBlocksMatrix(this,280,34);
+	m_pMatrix = new CBlocksMatrix(NULL,280,34);
 	m_pFont = new CGameFont;
 	m_pFont->CreateFont("01 Digitall", 20, FW_NORMAL);
 
@@ -22,14 +22,6 @@ CPlayState::CPlayState(CStateManager* pManager)
 	m_pScoreControl = new CTextControl(m_pFont,TRectanglei(145,210,620,730));
 	m_pScoreControl->SetAlignement(CTextControl::TACenter);
 	m_pScoreControl->SetTextColor(1.0f,0.588f,0.039f);
-	m_pLinesControl = new CTextControl(m_pFont,TRectanglei(320,385,620,730));
-	m_pLinesControl->SetAlignement(CTextControl::TACenter);
-	m_pLinesControl->SetTextColor(1.0f,0.588f,0.039f);
-	m_pLevelControl = new CTextControl(m_pFont,TRectanglei(500,565,620,730));
-	m_pLevelControl->SetAlignement(CTextControl::TACenter);
-	m_pLevelControl->SetTextColor(1.0f,0.588f,0.039f);
-
-	m_pBackgroundImg = CImage::CreateImage("PlayBckgnd.png",TRectanglei(0,600,0,800));
 }
 
 CPlayState::~CPlayState()
@@ -85,16 +77,16 @@ void CPlayState::OnKeyDown(WPARAM wKey)
 			m_pMatrix->ShapeRight();
 		break;
 	case VK_ESCAPE:
-		ChangeState(CMenuState::GetInstance(m_pStateManager));
+//		ChangeState(CMenuState::GetInstance(m_pStateManager));
 		break;
-	case VK_RETURN:
-		if (m_bGameOver)
-		{
-			CHighScoreState* pHighScores = 
-				CHighScoreState::GetInstance(m_pStateManager);
-			pHighScores->SetNewHighScore(m_ulCurrentScore);
-			ChangeState(pHighScores);
-		}
+	// case VK_RETURN:
+	//	if (m_bGameOver)
+	//	{
+	//		CHighScoreState* pHighScores = 
+	//			CHighScoreState::GetInstance(m_pStateManager);
+	//		pHighScores->SetNewHighScore(m_ulCurrentScore);
+	//		ChangeState(pHighScores);
+	//	}
 	}
 }
 
@@ -109,89 +101,87 @@ void CPlayState::Update(DWORD dwCurrentTime)
 
 void CPlayState::Draw()  
 { 
-	m_pBackgroundImg->BlitImage(0,0);
-
 	m_pMatrix->Draw();
 
 	stringstream ssScore;
 	ssScore << m_ulCurrentScore;
 	m_pScoreControl->SetText(ssScore.str());
 	m_pScoreControl->Draw();
+	
+	//stringstream ssLines;
+	//ssLines << m_iTotalLines;
+	//m_pLinesControl->SetText(ssLines.str());
+	//m_pLinesControl->Draw();
 
-	stringstream ssLines;
-	ssLines << m_iTotalLines;
-	m_pLinesControl->SetText(ssLines.str());
-	m_pLinesControl->Draw();
+	//stringstream ssLevel;
+	//ssLevel << m_iCurrentLevel;
+	//m_pLevelControl->SetText(ssLevel.str());
+	//m_pLevelControl->Draw();
 
-	stringstream ssLevel;
-	ssLevel << m_iCurrentLevel;
-	m_pLevelControl->SetText(ssLevel.str());
-	m_pLevelControl->Draw();
+	//if (m_pMatrix->GetNextShape())
+	//	m_pMatrix->GetNextShape()->DrawOnScreen(TRectanglei(165,220,80,225));
 
-	if (m_pMatrix->GetNextShape())
-		m_pMatrix->GetNextShape()->DrawOnScreen(TRectanglei(165,220,80,225));
+	//m_pComboControl->Draw();
+	//if (m_bGameOver)
+	//{
+	//	// In game over, we draw a semi-transparent black screen on top
+	//	// of the background. This is possible because blending has 
+	//	// been enabled.
+	//	glColor4f(0.0,0.0,0.0,0.5);
+	//	// Disable 2D texturing because we want to draw a non
+	//	// textured rectangle over the screen.
+	//	glDisable(GL_TEXTURE_2D);
+	//	glBegin(GL_QUADS);
+	//	glVertex3i(0,0,0);
+	//	glVertex3i(0,600,0);
+	//	glVertex3i(800,600,0);
+	//	glVertex3i(800,0,0);
+	//	glEnd();
+	//	glEnable(GL_TEXTURE_2D);
 
-	m_pComboControl->Draw();
-	if (m_bGameOver)
-	{
-		// In game over, we draw a semi-transparent black screen on top
-		// of the background. This is possible because blending has 
-		// been enabled.
-		glColor4f(0.0,0.0,0.0,0.5);
-		// Disable 2D texturing because we want to draw a non
-		// textured rectangle over the screen.
-		glDisable(GL_TEXTURE_2D);
-		glBegin(GL_QUADS);
-		glVertex3i(0,0,0);
-		glVertex3i(0,600,0);
-		glVertex3i(800,600,0);
-		glVertex3i(800,0,0);
-		glEnd();
-		glEnable(GL_TEXTURE_2D);
-
-		m_pFont->DrawText("GAME OVER",340,200);
-		m_pFont->DrawText("Press Enter to continue",285,300);
-	}
+	//	m_pFont->DrawText("GAME OVER",340,200);
+	//	m_pFont->DrawText("Press Enter to continue",285,300);
+	//}
 
 }
 
-void CPlayState::OnStartRemoveLines()
-{
-	m_pComboControl->Pause();
-}
-
-void CPlayState::OnLinesRemoved(int iLinesCount)
-{
-	m_iTotalLines += iLinesCount;
-	int comboMultiplier = m_pComboControl->GetMultiplier();
-	switch (iLinesCount)
-	{
-	case 1:
-		m_ulCurrentScore += (m_iCurrentLevel+1) * 40 * comboMultiplier;
-		break;
-	case 2:
-		m_ulCurrentScore += (m_iCurrentLevel+1) * 100 * comboMultiplier;
-		break;
-	case 3:
-		m_ulCurrentScore += (m_iCurrentLevel+1) * 300 * comboMultiplier;
-		break;
-	case 4:
-		m_ulCurrentScore += (m_iCurrentLevel+1) * 1200 * comboMultiplier;
-		break;
-	}
-
-	if (m_iTotalLines/10 > m_iCurrentLevel)
-	{
-		m_iCurrentLevel++;
-		int iNewUpdateRate = (int)(m_pMatrix->GetTetradUpdate() * 0.8);
-		m_pMatrix->SetTetradUpdate(iNewUpdateRate);
-	}
-	m_pComboControl->IncreaseMultiplier();
-	m_pComboControl->Unpause();
-}
-
-void CPlayState::OnMatrixFull()
-{
-	m_bGameOver = true;
-	m_pComboControl->Pause();
-}
+//void CPlayState::OnStartRemoveLines()
+//{
+//	m_pComboControl->Pause();
+//}
+//
+//void CPlayState::OnLinesRemoved(int iLinesCount)
+//{
+//	m_iTotalLines += iLinesCount;
+//	int comboMultiplier = m_pComboControl->GetMultiplier();
+//	switch (iLinesCount)
+//	{
+//	case 1:
+//		m_ulCurrentScore += (m_iCurrentLevel+1) * 40 * comboMultiplier;
+//		break;
+//	case 2:
+//		m_ulCurrentScore += (m_iCurrentLevel+1) * 100 * comboMultiplier;
+//		break;
+//	case 3:
+//		m_ulCurrentScore += (m_iCurrentLevel+1) * 300 * comboMultiplier;
+//		break;
+//	case 4:
+//		m_ulCurrentScore += (m_iCurrentLevel+1) * 1200 * comboMultiplier;
+//		break;
+//	}
+//
+//	if (m_iTotalLines/10 > m_iCurrentLevel)
+//	{
+//		m_iCurrentLevel++;
+//		int iNewUpdateRate = (int)(m_pMatrix->GetTetradUpdate() * 0.8);
+//		m_pMatrix->SetTetradUpdate(iNewUpdateRate);
+//	}
+//	m_pComboControl->IncreaseMultiplier();
+//	m_pComboControl->Unpause();
+//}
+//
+//void CPlayState::OnMatrixFull()
+//{
+//	m_bGameOver = true;
+//	m_pComboControl->Pause();
+//}

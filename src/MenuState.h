@@ -14,9 +14,9 @@ class CMenuState : public CGameState
 public:
 	~CMenuState();
 
-	void OnKeyDown(WPARAM wKey);
-	void Draw();
-	void EnterState();
+	//void OnKeyDown(WPARAM wKey);
+	//void Draw();
+	//void EnterState();
 
 	static CMenuState* GetInstance(CStateManager* pManager);
 
@@ -26,10 +26,10 @@ protected:
 private:
 	// The player went up or down in 
 	// the menu
-	void SelectionUp();
-	void SelectionDown();
-	// The player validated the current selection
-	void SelectionChosen();
+	//void SelectionUp();
+	//void SelectionDown();
+	//// The player validated the current selection
+	//void SelectionChosen();
 
 	CGameFont* m_pFont;
 	// Index of the current selected menu item
@@ -39,7 +39,6 @@ private:
 	CPlayState* m_pCurrentGame;
 
 	// The background and title images
-	TImagePtr m_pBackgroundImg;
 	TImagePtr m_pTitleImg;
 
 	// The images of the menu items (normal and

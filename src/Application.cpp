@@ -43,6 +43,9 @@ void CApplication::Run()
 		// timeout is recalculated so that this function will return at
 		// least every FRAME_TIME msec.
 		DWORD dwResult = MsgWaitForMultipleObjectsEx(0,NULL,dwSleep,QS_ALLEVENTS,0);
+		// —транна€ конструкци€. я обычно делаю проще - засекаю врем€ в начале
+		// генерации кадра и в конце. ј потом делаю Sleep, скажем, на 
+		// 100 мс - <врем€ построени€ последнего кадра> чтобы процессор не работал попусту.
 		if (dwResult != WAIT_TIMEOUT)
 		{
 			// If the function returned with no timeout, it means that at 

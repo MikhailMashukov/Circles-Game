@@ -74,7 +74,6 @@ private:
 	THighScoreTable m_vecHighScores;
 
 	// The background and title images.
-	TImagePtr m_pBackgroundImg; 
 	TImagePtr m_pTitleImg; 
 	// The image of the entries background
 	TImagePtr m_pEntriesBckgndImg;

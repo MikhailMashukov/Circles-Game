@@ -7,7 +7,7 @@
 using namespace std;
 
 
-#define WINDOW_CLASSNAME    "TetroGL"  // Window class name
+#define WINDOW_CLASSNAME    "Circles Game"  // Window class name
 
 CMainWindow::CMainWindow(int iWidth, int iHeight, bool bFullScreen) 
   :  m_hWindow(NULL), m_hDeviceContext(NULL), m_hGLContext(NULL), 
@@ -58,7 +58,7 @@ CMainWindow::CMainWindow(int iWidth, int iHeight, bool bFullScreen)
 	AdjustWindowRectEx(&WindowRect, dwStyle, FALSE, dwExStyle);		
 	// Now create the main window
     m_hWindow = CreateWindowEx(dwExStyle,TEXT(WINDOW_CLASSNAME), 
-							 TEXT("TetroGL"), 
+							 TEXT("Circles Game"), 
 							 WS_CLIPSIBLINGS | WS_CLIPCHILDREN | dwStyle,
 							 0, 0, WindowRect.right-WindowRect.left, 
 							 WindowRect.bottom-WindowRect.top, 
@@ -80,7 +80,7 @@ CMainWindow::CMainWindow(int iWidth, int iHeight, bool bFullScreen)
 	CGameFont::SetDeviceContext(m_hDeviceContext);
 
 	m_pStateManager = new CStateManager;
-	m_pStateManager->ChangeState(CMenuState::GetInstance(m_pStateManager));
+	m_pStateManager->ChangeState(CPlayState::GetInstance(m_pStateManager));
 }
 
 CMainWindow::~CMainWindow()

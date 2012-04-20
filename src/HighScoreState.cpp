@@ -15,9 +15,6 @@ CHighScoreState::CHighScoreState(CStateManager* pManager)
 	m_pFont->CreateFont("Verdana", 20, FW_NORMAL);
 	m_pCurrentName[0] = '\0';
 
-	m_pBackgroundImg = CImage::CreateImage("MainBackground.png",TRectanglei(0,600,0,800));
-	m_pTitleImg = CImage::CreateImage("ScoresTitle.png",TRectanglei(0,600,0,800));
-	
 	m_pEntriesBckgndImg = CImage::CreateImage("HighScoreItems.png",TRectanglei(70,99,0,600));
 	m_pEnterNameImg = CImage::CreateImage("HighScoreItems.png",TRectanglei(0,39,0,150));
 	m_pEnterNameBackImg = CImage::CreateImage("HighScoreItems.png",TRectanglei(40,69,0,350));
@@ -87,9 +84,6 @@ void CHighScoreState::OnChar(WPARAM wChar)
 
 void CHighScoreState::Draw()  
 {
-	m_pBackgroundImg->BlitImage();
-	m_pTitleImg->BlitImage();
-
 	int yPos = 135;
 	THighScoreTable::iterator iter = m_vecHighScores.begin();
 	for (iter; iter!=m_vecHighScores.end(); iter++)

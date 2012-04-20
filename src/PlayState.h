@@ -7,8 +7,7 @@
 #include "ComboControl.h"
 #include "TextControl.h"
 
-class CPlayState : public CGameState, 
-				   public CMatrixEventsListener
+class CPlayState : public CGameState
 {
 public:
 	~CPlayState();
@@ -19,12 +18,12 @@ public:
 	void Draw();
 
 	// Implementation of the CMatrixEventsListener class
-	void OnStartRemoveLines();
-	void OnLinesRemoved(int iLinesCount);
-	void OnMatrixFull();
+	//void OnStartRemoveLines();
+	//void OnLinesRemoved(int iLinesCount);
+	//void OnMatrixFull();
 
 	void Reset();
-	bool IsGameOver()  { return m_bGameOver; }
+//	bool IsGameOver()  { return m_bGameOver; }
 
 	// Returns the single instance
 	static CPlayState* GetInstance(CStateManager* pManager);
@@ -57,7 +56,6 @@ private:
 	bool m_bGameOver;
 
 	// The background image
-	TImagePtr m_pBackgroundImg;
 };
 
 #endif  // _PLAYSTATE_H_
