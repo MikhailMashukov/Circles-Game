@@ -80,7 +80,7 @@ void CPlayState::AddRandomCircle()
 		radius = m_circleSet.GetFieldHeight() / 2;
 	newCircle.radius = radius;
 	newCircle.y = m_circleSet.GetFieldHeight() - radius;
-	newCircle.x = double(rand()) / RAND_MAX * (1 - radius * 2) + radius / 2.0;
+	newCircle.x = double(rand()) / RAND_MAX * (1 - radius * 2) + radius;
 	newCircle.color = RGB(rand() * 100 / RAND_MAX + 100,  
 		                    rand() * 155 / RAND_MAX + 100,
 												rand() * 128 / RAND_MAX + 128);
