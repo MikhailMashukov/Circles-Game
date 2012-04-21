@@ -14,7 +14,8 @@ CPlayState::CPlayState(CStateManager* pManager)
    m_pComboControl(NULL), m_pScoreControl(NULL), 
    m_pLevelControl(NULL), m_pLinesControl(NULL)
 {
-	Reset();
+	InitNewGame();
+	m_bGameOver = false;
 
 	AddFontResource("01 Digitall.ttf");
 	m_pMatrix = new CBlocksMatrix(NULL,280,34);
@@ -49,7 +50,7 @@ CPlayState* CPlayState::GetInstance(CStateManager* pManager)
 	return &Instance;
 }
 
-void CPlayState::Reset()
+void CPlayState::InitNewGame()
 {
 	// TODO srand(GetTickCount());
 	m_curLevel = 1;
@@ -57,6 +58,13 @@ void CPlayState::Reset()
 
 	for (int i = 0; i < 3; i++)
 		AddRandomCircle();
+}
+
+void CPlayState::Reset()
+{
+	m_bGameOver = false;
+	m_pMatrix->Reset();
+	m_pComboControl->Reset();
 }
 
 void CPlayState::AddRandomCircle()
@@ -105,6 +113,7 @@ void CPlayState::OnKeyDown(WPARAM wKey)
 		break;
 	case VK_ESCAPE:
 //		ChangeState(CMenuState::GetInstance(m_pStateManager));
+		PostQuitMessage(0);
 		break;
 	// case VK_RETURN:
 	//	if (m_bGameOver)
@@ -183,21 +192,23 @@ void CPlayState::DrawCircles()
 	const CCircleSet::TCircleList& circles = m_circleSet.GetCurCircles();
 
 	glDisable(GL_TEXTURE_2D);
-	glBegin(GL_LINE_STRIP);
 	for (CCircleSet::TCircleList::const_iterator it = circles.begin(); it != circles.end(); it++)
 	{
 		const TCircle& circle = *it;
 
-		glColor3i(circle.color, 100, 100);
+		glBegin(GL_TRIANGLE_FAN);
+		glColor3b(circle.color, 100, 100);
+		glVertex2f(circle.x, circle.y);
 		for (int deg = 0; deg <= 360; deg += 30)
 		{
-			double x = circle.x + circle.radius * cos(double(deg) / 180 * M_PI);
+			double x = circle.x + circle.radius * 2* cos(double(deg) / 180 * M_PI);
 			double y = circle.y + circle.radius * 300 * sin(double(deg) / 180 * M_PI);
 
 			glVertex2f(x, y);
 		}
+		glEnd();
 	}
-	glEnd();
+	
 }
 
 //void CPlayState::OnStartRemoveLines()

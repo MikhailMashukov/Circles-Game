@@ -136,28 +136,28 @@ LRESULT CMainWindow::OnEvent(HWND Handle, UINT Message, WPARAM wParam, LPARAM lP
 
 void CMainWindow::ProcessEvent(UINT Message, WPARAM wParam, LPARAM lParam)
 {
-    switch (Message)
-    {
-	// Quit when we close the main window
-    case WM_CLOSE :
-		PostQuitMessage(0);
-		break;
-	case WM_SIZE:
-		OnSize(LOWORD(lParam),HIWORD(lParam));
-		break;
-	// Keydown event
-	case WM_KEYDOWN :
-		m_pStateManager->OnKeyDown(wParam);
-		break;
-	// Keyup event
-	case WM_KEYUP :
-		m_pStateManager->OnKeyUp(wParam);
-		break;
-	// Character event
-	case WM_CHAR:
-		m_pStateManager->OnChar(wParam);
-		break;
-    }
+	switch (Message)
+	{
+		// Quit when we close the main window
+		case WM_CLOSE :
+			PostQuitMessage(0);
+			break;
+		case WM_SIZE:
+			OnSize(LOWORD(lParam),HIWORD(lParam));
+			break;
+	  // Keydown event
+		case WM_KEYDOWN :
+			m_pStateManager->OnKeyDown(wParam);
+			break;
+		// Keyup event
+		case WM_KEYUP :
+			m_pStateManager->OnKeyUp(wParam);
+			break;
+		// Character event
+		case WM_CHAR:
+			m_pStateManager->OnChar(wParam);
+			break;
+	}
 }
 
 void CMainWindow::RegisterWindowClass()
@@ -216,7 +216,7 @@ void CMainWindow::InitGL()
 	// Enable 2D texturing
 	glEnable(GL_TEXTURE_2D);
 	// Choose a smooth shading model
-    glShadeModel(GL_FLAT);
+	glShadeModel(GL_FLAT);
 	// Set the clear color to black
 	glClearColor(0.0, 0.0, 0.0, 0.0);
 

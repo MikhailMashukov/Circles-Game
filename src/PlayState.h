@@ -39,6 +39,7 @@ public:
 protected:
 	CPlayState(CStateManager* pManager);
 
+	void InitNewGame();
 	void AddRandomCircle();
 	void DrawCircles();
 
