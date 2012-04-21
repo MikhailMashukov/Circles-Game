@@ -10,13 +10,11 @@ using namespace std;
 
 CPlayState::CPlayState(CStateManager* pManager)
  : CGameStateBase(pManager), 
-   m_windowWidth(1),
-	 m_windowHeight(1),
+   m_windowWidth(-1),
+	 m_windowHeight(-1),
    m_pFont(NULL), 
    m_pScoreControl(NULL)
 {
-	InitNewGame();
-
 	AddFontResource("01 Digitall.ttf");
 	m_pFont = new CGameFont;
 	m_pFont->CreateFont("01 Digitall", 20, FW_NORMAL);
@@ -44,9 +42,13 @@ CPlayState* CPlayState::GetInstance(CStateManager* pManager)
 
 void CPlayState::OnSize(int width, int height) 
 {
+	bool initFinished = (m_windowWidth < 0 && width > 0);
+
 	m_windowWidth = width;
 	m_windowHeight = height;
 	m_circleSet.SetFieldHeight(double(height) / width);
+	if (initFinished)
+		InitNewGame();
 }
 
 void CPlayState::InitNewGame()
@@ -73,7 +75,7 @@ void CPlayState::AddRandomCircle()
 	if (radius > 1)
 		radius = 1;
 	newCircle.radius = radius;
-	newCircle.y = 1 - radius;
+	newCircle.y = m_circleSet.GetFieldHeight() - radius;
 	newCircle.x = double(rand()) / RAND_MAX * (1 - radius);
 	newCircle.color = ((rand() * 128 / RAND_MAX + 128) << 16) +  // TODO: сделать превалирование цветов радуги или что-нибудь в этом духе
 		                ((rand() * 128 / RAND_MAX + 128) << 8) +
@@ -85,6 +87,10 @@ void CPlayState::AddRandomCircle()
 	// TODO? было бы прикольно, если бы коллизии проверялись и по ходу игры,
 	// но это надо менять игровую механику - в задании написано "двигаются без ускорения"
 
+	//newCircle.x = 0.01;  //d_
+	//newCircle.y = 0.99;
+	//newCircle.radius = 0.1;
+	//m_circleSet.Add(newCircle);
 }
 
 void CPlayState::OnKeyDown(WPARAM wKey)
@@ -106,18 +112,37 @@ void CPlayState::Update(double dt)
 
 void CPlayState::Draw()  
 { 
+	// Рисуем игровое поле. Проекцируем на имеющееся окно прямоугольник
+	// (0, 0) - (1, m_circleSet.GetFieldHeight())
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	glScaled(1.3, 1.3, 1);
+	glTranslated(-1, -1, 0);
+	glScaled(2, 2.0 / m_circleSet.GetFieldHeight(), 1);
 //	glOrtho(0, 1, 1.0 - double(m_windowHeight) / m_windowWidth, 1, -1.0, 1.0);
+	DrawField();    // Проверочный метод
 	DrawCircles();
 
+	// Печатаем информацию. Работаем в координатах (0, 0) - (windowWidth, windowHeight)
 	glLoadIdentity();
 	glOrtho(0, m_windowWidth, 0, m_windowHeight, -1.0, 1.0);
 	stringstream ssScore;
 	ssScore << m_curScore;
 	m_pScoreControl->SetText(ssScore.str());
 	m_pScoreControl->Draw();
+}
+
+void CPlayState::DrawField()
+{
+	const double d = 0.005;
+
+	glDisable(GL_TEXTURE_2D);
+	glBegin(GL_TRIANGLE_FAN);
+	glColor3b(30, 80, 30);
+	glVertex2d(d, d);
+	glVertex2d(d, m_circleSet.GetFieldHeight() - d);
+	glVertex2d(1 - d, m_circleSet.GetFieldHeight() - d);
+	glVertex2d(1 - d, d);
+	glEnd();
 }
 
 void CPlayState::DrawCircles()

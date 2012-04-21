@@ -41,6 +41,7 @@ public:
 	virtual ~CCircleSet();
 
 	void SetFieldHeight(double fieldHeight);
+	double GetFieldHeight() const  {  return m_fieldHeight;  }
 	void Add(const TCircle& circle);
 //	bool AddRandomCircle(double sizeMult = 1, double speedMult = 1);
 	            // CCircleSet имеет свою логику случайного выбора размера нового кружка,

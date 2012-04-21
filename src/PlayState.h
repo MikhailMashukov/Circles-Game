@@ -38,6 +38,7 @@ protected:
 
 	void InitNewGame();
 	void AddRandomCircle();
+	void DrawField();
 	void DrawCircles();
 
 private:
