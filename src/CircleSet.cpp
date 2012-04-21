@@ -20,6 +20,14 @@ void CCircleSet::Add(const TCircle& circle)
 
 void CCircleSet::MoveAll(double dt)
 {
+	for (TCircleList::iterator it = m_circles.begin(); it != m_circles.end(); it++)
+	{
+		TCircle& circle = *it;
+
+		circle.Update(dt);
+
+
+	}
 }
 
 const CCircleSet::TCircleList& CCircleSet::GetCurCircles() const

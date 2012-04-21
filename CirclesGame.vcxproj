@@ -94,6 +94,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\Application.cpp" />
+    <ClCompile Include="src\Circle.cpp" />
     <ClCompile Include="src\CircleSet.cpp" />
     <ClCompile Include="src\GameFont.cpp" />
     <ClCompile Include="src\GameStateBase.cpp" />
@@ -105,6 +106,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Application.h" />
+    <ClInclude Include="src\Circle.h" />
     <ClInclude Include="src\CircleSet.h" />
     <ClInclude Include="src\Exception.h" />
     <ClInclude Include="src\GameFont.h" />

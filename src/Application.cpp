@@ -43,9 +43,10 @@ void CApplication::Run()
 	// с точностью 10 мс).
 	// Мне гораздо больше нравится следующая конструкция
 
-	LARGE_INTEGER timerFreq;
+	LARGE_INTEGER timerFreq, prevUpdateTime;
 
 	QueryPerformanceFrequency(&timerFreq);
+	QueryPerformanceCounter(&prevUpdateTime);
 	// Loop until a WM_QUIT message is received
 	while (Message.message != WM_QUIT)
 	{
@@ -60,8 +61,9 @@ void CApplication::Run()
 		}
 		QueryPerformanceCounter(&curTime);
 
-		mainWindow.Update(double(curTime.QuadPart - frameStartTime.QuadPart) /
+		mainWindow.Update(double(curTime.QuadPart - prevUpdateTime.QuadPart) /
 			double(timerFreq.QuadPart));
+		prevUpdateTime = curTime;
 		// Draw the main window
 		mainWindow.Draw();
 		QueryPerformanceCounter(&curTime);

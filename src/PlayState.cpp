@@ -70,27 +70,23 @@ void CPlayState::AddRandomCircle()
   TCircle newCircle;
 	double sizeMult = 1.0 / (1 + (m_curLevel - 1) / 10.0);
 	double speedMult = 1 + (m_curLevel - 1) / 5.0;
-	double radius = (0.1 + double(rand()) / RAND_MAX / 6.0) * sizeMult;
+	double radius = (0.05 + double(rand()) / RAND_MAX / 12.0) * sizeMult;
 
-	if (radius > 1)
-		radius = 1;
+	if (radius > 0.5)
+		radius = 0.5;
 	newCircle.radius = radius;
 	newCircle.y = m_circleSet.GetFieldHeight() - radius;
-	newCircle.x = double(rand()) / RAND_MAX * (1 - radius);
+	newCircle.x = double(rand()) / RAND_MAX * (1 - radius * 2) + radius / 2.0;
 	newCircle.color = ((rand() * 128 / RAND_MAX + 128) << 16) +  // TODO: сделать превалирование цветов радуги или что-нибудь в этом духе
 		                ((rand() * 128 / RAND_MAX + 128) << 8) +
 										(rand() * 128 / RAND_MAX + 128);
-	newCircle.speedY = 0.1 / radius * speedMult;  
-	  // По умолчанию кружок радиусом 1/10 игрового поля пройдёт его за 9 секунд
+	newCircle.speedY = -0.005 / radius * speedMult;  
+	  // По умолчанию кружок диаметром 1/10 игрового поля пройдёт его за 9 секунд
+	  // (не за 10 потому что центр кружка проходит меньше, чем всё поле)
 	m_circleSet.Add(newCircle);
 	// TODO: проверять коллизии
 	// TODO? было бы прикольно, если бы коллизии проверялись и по ходу игры,
 	// но это надо менять игровую механику - в задании написано "двигаются без ускорения"
-
-	//newCircle.x = 0.01;  //d_
-	//newCircle.y = 0.99;
-	//newCircle.radius = 0.1;
-	//m_circleSet.Add(newCircle);
 }
 
 void CPlayState::OnKeyDown(WPARAM wKey)
@@ -118,8 +114,7 @@ void CPlayState::Draw()
 	glLoadIdentity();
 	glTranslated(-1, -1, 0);
 	glScaled(2, 2.0 / m_circleSet.GetFieldHeight(), 1);
-//	glOrtho(0, 1, 1.0 - double(m_windowHeight) / m_windowWidth, 1, -1.0, 1.0);
-	DrawField();    // Проверочный метод
+//	DrawField();    // Проверочный метод
 	DrawCircles();
 
 	// Печатаем информацию. Работаем в координатах (0, 0) - (windowWidth, windowHeight)
@@ -155,7 +150,7 @@ void CPlayState::DrawCircles()
 		const TCircle& circle = *it;
 
 		glBegin(GL_TRIANGLE_FAN);
-		glColor3b(circle.color, 100, 100);
+		glColor3ub(GetRValue(circle.color), GetGValue(circle.color), GetBValue(circle.color));
 		glVertex2d(circle.x, circle.y);
 		for (int deg = 0; deg <= 360; deg += 30)
 		{
