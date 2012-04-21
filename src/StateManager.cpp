@@ -44,3 +44,9 @@ void CStateManager::Draw()
 	if (m_pActiveState)
 		m_pActiveState->Draw();
 }
+
+void CStateManager::OnMouseLButtonDown(int x, int y)
+{
+	if (m_pActiveState)
+		m_pActiveState->OnMouseLButtonDown(x, y);
+}

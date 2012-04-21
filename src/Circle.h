@@ -12,7 +12,8 @@ struct TCircle
 	// ќднако это усложнит код, потребует использование smart pointer'ов и т.п.
 	// ¬ данном случае проще и удобнее оставить рисование в PlayState.cpp.
 
-	static const double c_disappearTime;  // ¬рем€ взрыва и исчезновени€ круга, в секундах
+	static const double c_blowTime;       // ¬рем€ взрыва и 
+  static const double c_disappearTime;  // исчезновени€ круга, в секундах
 
 	enum TState
 	{

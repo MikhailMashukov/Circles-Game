@@ -17,11 +17,7 @@ public:
 	void SetFieldHeight(double fieldHeight);
 	double GetFieldHeight() const  {  return m_fieldHeight;  }
 	void Add(const TCircle& circle);
-//	bool AddRandomCircle(double sizeMult = 1, double speedMult = 1);
-	            // CCircleSet имеет свою логику случайного выбора размера нового кружка,
-	            // и его скорости, но для реализации увеличения сложности по ходу игры,
-	            // есть возможность повлиять на результат этого выбора 
-	            // с помощью множителей
+	bool BlowCircleAtPoint(TCircle& blownCircle, double x, double y);
 	void MoveAll(double dt);
 	            // Двигает имеющиеся круги на speed * dt,
 	            // меняет кругам состояние при необходимости и 
@@ -33,14 +29,10 @@ public:
 	            // кружков.
 	            // Ссылка валидна до вызова любого другого метода CCircleSet и
 	            // удалеления объекта CCircleSet
-	const TCircleList& GetDeletedCircles() const;
-	            // Выдать круги, удалённые на последнем шаге (вызове MoveAll)
-	            // Ссылка валидна до вызова любого другого метода CCircleSet и
-	            // удалеления объекта CCircleSet
 
 protected:
 	double m_fieldHeight;
-	TCircleList m_circles, m_deletedCircles;
+	TCircleList m_circles;
 };
 
 #endif  // _CIRCLESET_H_

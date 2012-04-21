@@ -19,6 +19,8 @@ public:
 	// Implementation of specific events
 	void OnSize(int width, int height);
 	void OnKeyDown(WPARAM wKey);
+	void OnMouseLButtonDown(int x, int y);
+
 	void Update(double dt);
 	void Draw();
 

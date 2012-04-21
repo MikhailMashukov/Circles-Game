@@ -75,6 +75,8 @@ void CPlayState::AddRandomCircle()
 
 	if (radius > 0.5)
 		radius = 0.5;
+	if (radius > m_circleSet.GetFieldHeight() / 2)
+		radius = m_circleSet.GetFieldHeight() / 2;
 	newCircle.radius = radius;
 	newCircle.y = m_circleSet.GetFieldHeight() - radius;
 	newCircle.x = double(rand()) / RAND_MAX * (1 - radius * 2) + radius / 2.0;
@@ -104,9 +106,14 @@ void CPlayState::Update(double dt)
 {
 	m_circleSet.MoveAll(dt);
 
+	double probabilityMult = m_curLevel;
+
+	if (m_circleSet.GetCurCircles().size() < 3)
+		probabilityMult *= sqrt(double(4 - m_circleSet.GetCurCircles().size()));
+
 	  // Вероятность такова, что на первом уровне сложности должен появляться
 	  // примерно один круг в секунду
-	if (rand() < RAND_MAX * dt * m_curLevel)
+	if (rand() < RAND_MAX * dt * probabilityMult)
 		AddRandomCircle();
 }
 
@@ -163,9 +170,9 @@ void CPlayState::DrawCircles()
 
 			case TCircle::csBlowing:
 				{
-					double mult = 1 + pow(1.0 - circle.curStateTime / TCircle::c_disappearTime, 4);
+					double mult = (1 + pow(circle.curStateTime / TCircle::c_blowTime, 4) * 2) / 255;
 
-					r *= pow(1.0 - circle.curStateTime / TCircle::c_disappearTime, 2);
+					r += 0.2 * pow(1.0 + circle.curStateTime / TCircle::c_blowTime, 2) / 8;
 					glColor3d(GetRValue(circle.color) * mult, 
 						        GetGValue(circle.color) * mult, 
 										GetBValue(circle.color) * mult);
@@ -185,11 +192,18 @@ void CPlayState::DrawCircles()
 				assert(0);
 		}
 
+		int faceCount = int(m_windowWidth * r) / 8 * 4;
+
+		if (faceCount < 4)
+			faceCount = 4;
+
+		double angleStep = 2 * M_PI / faceCount;
+
 		glVertex2d(circle.x, circle.y);
-		for (int deg = 0; deg <= 360; deg += 30)
+		for (double angle = 0; angle <= 2 * M_PI + 0.0001; angle += angleStep)
 		{
-			double x = circle.x + r * cos(double(deg) / 180 * M_PI);
-			double y = circle.y + r * sin(double(deg) / 180 * M_PI);
+			double x = circle.x + r * cos(angle);
+			double y = circle.y + r * sin(angle);
 
 			glVertex2d(x, y);
 		}
@@ -198,43 +212,14 @@ void CPlayState::DrawCircles()
 	
 }
 
-//void CPlayState::OnStartRemoveLines()
-//{
-//	m_pComboControl->Pause();
-//}
-//
-//void CPlayState::OnLinesRemoved(int iLinesCount)
-//{
-//	m_iTotalLines += iLinesCount;
-//	int comboMultiplier = m_pComboControl->GetMultiplier();
-//	switch (iLinesCount)
-//	{
-//	case 1:
-//		m_ulCurrentScore += (m_iCurrentLevel+1) * 40 * comboMultiplier;
-//		break;
-//	case 2:
-//		m_ulCurrentScore += (m_iCurrentLevel+1) * 100 * comboMultiplier;
-//		break;
-//	case 3:
-//		m_ulCurrentScore += (m_iCurrentLevel+1) * 300 * comboMultiplier;
-//		break;
-//	case 4:
-//		m_ulCurrentScore += (m_iCurrentLevel+1) * 1200 * comboMultiplier;
-//		break;
-//	}
-//
-//	if (m_iTotalLines/10 > m_iCurrentLevel)
-//	{
-//		m_iCurrentLevel++;
-//		int iNewUpdateRate = (int)(m_pMatrix->GetTetradUpdate() * 0.8);
-//		m_pMatrix->SetTetradUpdate(iNewUpdateRate);
-//	}
-//	m_pComboControl->IncreaseMultiplier();
-//	m_pComboControl->Unpause();
-//}
-//
-//void CPlayState::OnMatrixFull()
-//{
-//	m_bGameOver = true;
-//	m_pComboControl->Pause();
-//}
+void CPlayState::OnMouseLButtonDown(int x, int y)
+{
+	double dx = double(x) / m_windowWidth;
+	double dy = double(m_windowHeight - y) / m_windowWidth;
+	TCircle blownCircle;
+
+	if (m_circleSet.BlowCircleAtPoint(blownCircle, dx, dy))
+	{
+		m_curScore += int(0.1 / pow(blownCircle.radius, 1.5) * (1 + m_curLevel * 0.3) + 0.5);
+	}
+}

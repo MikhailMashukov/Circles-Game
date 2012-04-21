@@ -2,6 +2,7 @@
 #include "Exception.h"
 #include "PlayState.h"
 #include "GameFont.h"
+#include <windowsx.h>
 
 using namespace std;
 
@@ -158,6 +159,9 @@ void CMainWindow::ProcessEvent(UINT Message, WPARAM wParam, LPARAM lParam)
 		case WM_CHAR:
 			m_pStateManager->OnChar(wParam);
 			break;
+		case WM_LBUTTONDOWN:
+			m_pStateManager->OnMouseLButtonDown(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
+
 	}
 }
 

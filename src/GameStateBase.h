@@ -31,10 +31,12 @@ public:
 	// implement the ones in which they are interested in.
 	// Действительно, не требуется заставлять определять все эти методы
 	// в классах-наследниках, поэтому методы не чисто виртуальные
-	virtual void OnSize(int width, int height)  { }
+	virtual void OnSize(int , int )  { }
 	virtual void OnKeyDown(WPARAM ) { }
 	virtual void OnKeyUp(WPARAM )   { }
-	virtual void OnChar(WPARAM )   { }
+	virtual void OnChar(WPARAM )    { }
+	virtual void OnMouseLButtonDown(int , int )  { }
+
 	virtual void Update(double )  { }  
 	            // Обновить игровое состояние с учётом того, что прошло
 	            // указанное количество секунд

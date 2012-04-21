@@ -30,6 +30,8 @@ public:
 	void OnKeyDown(WPARAM wKey);
 	void OnKeyUp(WPARAM wKey);
 	void OnChar(WPARAM wChar);
+	void OnMouseLButtonDown(int x, int y);
+
 	void Update(double dt);
 	void Draw();
 

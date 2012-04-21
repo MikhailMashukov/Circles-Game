@@ -1,6 +1,7 @@
 #include "Circle.h"
 #include <assert.h>
 
+const double TCircle::c_blowTime = 0.12;
 const double TCircle::c_disappearTime = 0.5;
 
 TCircle::TCircle()
@@ -24,6 +25,13 @@ void TCircle::Update(double dt)
 			break;
 
 		case csBlowing:
+			{
+				curStateTime += dt;
+				if (curStateTime >= c_blowTime)
+					state = csDisappeared;
+			}
+			break;
+
 		case csDisappearing:
 			{
 				curStateTime += dt;

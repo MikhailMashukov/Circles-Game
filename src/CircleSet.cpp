@@ -1,5 +1,11 @@
 #include "CircleSet.h"
 
+inline double sqr(double v)  
+{ 
+	return v * v;
+}
+
+
 CCircleSet::CCircleSet()
 {
 }
@@ -39,3 +45,28 @@ const CCircleSet::TCircleList& CCircleSet::GetCurCircles() const
 	return m_circles;
 }
 
+bool CCircleSet::BlowCircleAtPoint(TCircle& blownCircle, double x, double	 y)
+{
+	  // Проверяем начиная с последних т.к. они рисуются сверху
+	for (TCircleList::reverse_iterator it = m_circles.rbegin(); it != m_circles.rend(); it++)
+	{
+		TCircle& circle = *it;
+
+		if (circle.state != TCircle::csFalling)
+			continue;
+
+		  // Относительно быстрое отсечение. Пригодится при тысячах кружков
+		if (circle.x - circle.radius > x || circle.x + circle.radius < x)
+			continue;
+
+		if (sqr(circle.x - x) + sqr(circle.y - y) < sqr(circle.radius))
+		{
+			circle.state = TCircle::csBlowing;
+			circle.curStateTime = 0;
+			blownCircle = circle;
+			return true;
+		}
+	}
+
+	return false;
+}
