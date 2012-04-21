@@ -1,15 +1,15 @@
 #ifndef _MENUSTATE_H_
 #define _MENUSTATE_H_
 
-#include "GameState.h"
+#include "GameStateBase.h"
 #include "GameFont.h"
 #include "PlayState.h"
 
-// Specialization of the CGameState class for 
+// Specialization of the CGameStateBase class for 
 // the menu state. This displays a menu in which
 // the player can start a new game, continue an 
 // existing game, see the high-scores or exit the game.
-class CMenuState : public CGameState
+class CMenuState : public CGameStateBase
 {
 public:
 	~CMenuState();

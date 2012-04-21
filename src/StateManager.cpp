@@ -1,5 +1,5 @@
 #include "StateManager.h"
-#include "GameState.h"
+#include "GameStateBase.h"
 
 CStateManager::CStateManager() : m_pActiveState(NULL)
 {

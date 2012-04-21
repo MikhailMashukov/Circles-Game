@@ -1,7 +1,7 @@
 #ifndef _STATEMANAGER_H_
 #define _STATEMANAGER_H_
 
-#include "GameState.h"
+#include "GameStateBase.h"
 
 // Manages the different states of the game.
 class CStateManager
@@ -13,7 +13,7 @@ public:
 	~CStateManager();
 
 	// Switches to another active state.
-	void ChangeState(CGameState* pNewState)
+	void ChangeState(CGameStateBase* pNewState)
 	{
 		if (m_pActiveState)
 			m_pActiveState->LeaveState();
@@ -22,7 +22,7 @@ public:
 	}
 
 	// Returns the current active state.
-	CGameState* GetActiveState()  { return m_pActiveState; }
+	CGameStateBase* GetActiveState()  { return m_pActiveState; }
 
 	// 'Events' function, they are simply redirected to
 	// the active state.
@@ -34,7 +34,7 @@ public:
 
 private:
 	// Active State of the game (intro, play, ...)
-	CGameState* m_pActiveState;		
+	CGameStateBase* m_pActiveState;		
 };
 
 #endif  // _STATEMANAGER_H_

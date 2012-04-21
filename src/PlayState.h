@@ -1,14 +1,19 @@
 #ifndef _PLAYSTATE_H_
 #define _PLAYSTATE_H_
 
-#include "GameState.h"
+#include "GameStateBase.h"
 #include "BlocksMatrix.h"
 #include "GameFont.h"
 #include "ComboControl.h"
 #include "TextControl.h"
 
-class CPlayState : public CGameState
+class CPlayState : public CGameStateBase
 {
+	// В этом классе реализована основная логика игры - обработка событий,
+	// подсчёт и отображение очков... Единственное, хранилище объектов 
+	// реализовано в отдельном классе CCircleSet. Этот класс вообще не знает 
+	// про очки, OpenGL, клики мышкой и т.п.
+
 public:
 	~CPlayState();
 
@@ -32,6 +37,11 @@ protected:
 	CPlayState(CStateManager* pManager);
 
 private:
+	
+
+
+
+
 	// The blocks matrix class
 	CBlocksMatrix* m_pMatrix;
 	// The font used to draw text

@@ -1,18 +1,18 @@
 #ifndef _HIGHSCORESTATE_H_
 #define _HIGHSCORESTATE_H_
 
-#include "GameState.h"
+#include "GameStateBase.h"
 #include "GameFont.h"
 #include "Image.h"
 #include <string>
 #include <vector>
 
-// Specialization of the CGameState class for 
+// Specialization of the CGameStateBase class for 
 // the high scores state. This displays the high
 // scores (player name+score). When a new high 
 // score is available after a game, it lets the 
 // player enters his name.
-class CHighScoreState : public CGameState
+class CHighScoreState : public CGameStateBase
 {
 public:
 	~CHighScoreState();

@@ -8,7 +8,7 @@ using namespace std;
 
 
 CHighScoreState::CHighScoreState(CStateManager* pManager) 
-  : CGameState(pManager), m_ulNewHighScore(0), m_bEnterName(false), 
+  : CGameStateBase(pManager), m_ulNewHighScore(0), m_bEnterName(false), 
     m_pFont(NULL), m_iNameIndex(0), m_vecHighScores()
 {
 	m_pFont = new CGameFont;

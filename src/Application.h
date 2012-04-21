@@ -18,7 +18,7 @@ public:
 	void Run();
 
 private:
-	static const int FRAME_TIME = 30;
+	static const int FRAME_TIME = 60;
 
 	HINSTANCE m_hInstance;
 	// Specifies if the application has to be started in fullscreen

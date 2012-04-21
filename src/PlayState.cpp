@@ -7,7 +7,7 @@
 using namespace std;
 
 CPlayState::CPlayState(CStateManager* pManager)
- : CGameState(pManager), m_pMatrix(NULL), m_pFont(NULL), 
+ : CGameStateBase(pManager), m_pMatrix(NULL), m_pFont(NULL), 
    m_pComboControl(NULL), m_pScoreControl(NULL), 
    m_pLevelControl(NULL), m_pLinesControl(NULL),
    m_iTotalLines(0), m_iCurrentLevel(0), m_ulCurrentScore(0), 

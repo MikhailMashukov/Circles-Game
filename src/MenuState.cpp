@@ -6,7 +6,7 @@
 
 
 CMenuState::CMenuState(CStateManager* pManager) 
-  : CGameState(pManager), m_pFont(NULL), m_iCurrentSelection(0), 
+  : CGameStateBase(pManager), m_pFont(NULL), m_iCurrentSelection(0), 
     m_pCurrentGame(NULL)
 {
 	m_pFont = new CGameFont;
