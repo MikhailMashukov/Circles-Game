@@ -2,8 +2,11 @@
 #define _PLAYSTATE_H_
 
 #include "GameStateBase.h"
-#include "BlocksMatrix.h"
+#include "CircleSet.h"
 #include "GameFont.h"
+
+
+#include "BlocksMatrix.h"
 #include "ComboControl.h"
 #include "TextControl.h"
 
@@ -19,7 +22,7 @@ public:
 
 	// Implementation of specific events
 	void OnKeyDown(WPARAM wKey);
-	void Update(DWORD dwCurrentTime);
+	void Update(double dt);
 	void Draw();
 
 	// Implementation of the CMatrixEventsListener class
@@ -36,9 +39,12 @@ public:
 protected:
 	CPlayState(CStateManager* pManager);
 
-private:
-	
+	void AddRandomCircle();
+	void DrawCircles();
 
+private:
+	CCircleSet m_circleSet;
+	int m_curLevel, m_curScore;
 
 
 

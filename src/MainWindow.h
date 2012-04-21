@@ -15,7 +15,7 @@ public:
 	~CMainWindow();
 
 	// Called by the application class to update the game logic
-	void Update(DWORD dwCurrentTime);
+	void Update(double dt);
 	// Called by the application class when the window need to be redrawn.
 	void Draw();
 

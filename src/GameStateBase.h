@@ -34,7 +34,9 @@ public:
 	virtual void OnKeyDown(WPARAM ) { }
 	virtual void OnKeyUp(WPARAM )   { }
 	virtual void OnChar(WPARAM )   { }
-	virtual void Update(DWORD )  { }
+	virtual void Update(double )  { }  
+	            // Обновить игровое состояние с учётом того, что прошло
+	            // указанное количество секунд
 	virtual void Draw()  { }
 
 	// Functions called when the state is entered or left

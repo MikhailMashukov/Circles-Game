@@ -236,11 +236,12 @@ void CMainWindow::OnSize(GLsizei width, GLsizei height)
 	glLoadIdentity();
 	glOrtho(0.0,width,height,0.0,-1.0,1.0);
 	glMatrixMode(GL_MODELVIEW);
+	glDisable(GL_DEPTH_TEST);
 }
 
-void CMainWindow::Update(DWORD dwCurrentTime)
+void CMainWindow::Update(double dt)
 {
-	m_pStateManager->Update(dwCurrentTime);
+	m_pStateManager->Update(dt);
 }
 
 void CMainWindow::Draw()

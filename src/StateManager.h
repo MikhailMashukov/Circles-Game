@@ -29,7 +29,7 @@ public:
 	void OnKeyDown(WPARAM wKey);
 	void OnKeyUp(WPARAM wKey);
 	void OnChar(WPARAM wChar);
-	void Update(DWORD dwCurrentTime);
+	void Update(double dt);
 	void Draw();
 
 private:

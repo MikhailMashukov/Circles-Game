@@ -2,6 +2,10 @@
 #include "MainWindow.h"
 #include <string>
 
+// TODO? Не знаю, как при разработке для Android,
+// но обычно очень желательно использовать precompiled headers
+
+
 // Disable the warnings for deprecated functions (strtok and stricmp)
 #pragma warning(disable:4996)
 
@@ -30,67 +34,42 @@ void CApplication::Run()
 	// Create the main window first
 	CMainWindow mainWindow(800,600,m_bFullScreen);
 
-    MSG Message;
-    Message.message = (UINT)~WM_QUIT;
-	DWORD dwNextDeadLine = GetTickCount() + FRAME_TIME;
-	DWORD dwSleep = FRAME_TIME;
-	bool bUpdate = false;
+	MSG Message;
+	Message.message = (UINT)~WM_QUIT;
 
+	// Нет, я считаю, это кривая конструкция, когда движок содержит функцию
+	// Update c параметром int, который ещё и результат GetTickCount()
+	// (хотя бы потому, что на самом деле GetTickCount возвращает время 
+	// с точностью 10 мс).
+	// Мне гораздо больше нравится следующая конструкция
+
+	LARGE_INTEGER timerFreq;
+
+	QueryPerformanceFrequency(&timerFreq);
 	// Loop until a WM_QUIT message is received
-    while (Message.message != WM_QUIT)
-    {
-		// Wait until a message comes in or until the timeout expires. The
-		// timeout is recalculated so that this function will return at
-		// least every FRAME_TIME msec.
-		DWORD dwResult = MsgWaitForMultipleObjectsEx(0,NULL,dwSleep,QS_ALLEVENTS,0);
-		// Странная конструкция. Я обычно делаю проще - засекаю время в начале
-		// генерации кадра и в конце. А потом делаю Sleep, скажем, на 
-		// 100 мс - <время построения последнего кадра> чтобы процессор не работал попусту.
-		if (dwResult != WAIT_TIMEOUT)
+	while (Message.message != WM_QUIT)
+	{
+		LARGE_INTEGER frameStartTime, curTime;
+
+		QueryPerformanceCounter(&frameStartTime);
+		while (PeekMessage(&Message, NULL, 0, 0, PM_REMOVE))
 		{
-			// If the function returned with no timeout, it means that at 
-			// least one message has been received, so process all of them.
-			while (PeekMessage(&Message, NULL, 0, 0, PM_REMOVE))
-			{
-				// If a message was waiting in the message queue, process it
-				TranslateMessage(&Message);
-				DispatchMessage(&Message);
-			}
-
-			// If the current time is close (or past) to the 
-			// deadline, the application should be processed.
-			if (GetTickCount() >= dwNextDeadLine-1)
-				bUpdate = true;
-			else
-				bUpdate = false;
+			// If a message was waiting in the message queue, process it
+			TranslateMessage(&Message);
+			DispatchMessage(&Message);
 		}
-		else
-			// On a timeout, the application should be processed.
-			bUpdate = true;
+		QueryPerformanceCounter(&curTime);
 
-		// Check if the application should be processed
-		if (bUpdate)
-		{
-			DWORD dwCurrentTime = GetTickCount();
-			// Update the main window
-			mainWindow.Update(dwCurrentTime);
-			// Draw the main window
-			mainWindow.Draw();
+		mainWindow.Update(double(curTime.QuadPart - frameStartTime.QuadPart) /
+			double(timerFreq.QuadPart));
+		// Draw the main window
+		mainWindow.Draw();
+		QueryPerformanceCounter(&curTime);
 
-			dwNextDeadLine = dwNextDeadLine + FRAME_TIME;
-		}
+		int sleepTime = int((1.0 / c_maxFrameRate - 
+			double(curTime.QuadPart - frameStartTime.QuadPart) / double(timerFreq.QuadPart)) * 1000);
 
-		// Process the sleep time, which is the difference
-		// between the current time and the next deadline.
-		dwSleep =  dwNextDeadLine - GetCurrentTime();
-		// If the sleep time is larger than the frame time,
-		// it probably means that the processing was stopped 
-		// (e.g. the window was being moved,...), so recalculate
-		// the next deadline.
-		if (dwSleep>FRAME_TIME)
-		{
-			dwSleep = FRAME_TIME;
-			dwNextDeadLine = GetCurrentTime() + FRAME_TIME;
-		}
+		if (sleepTime > 0)
+			Sleep(sleepTime);
 	}
 }

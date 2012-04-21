@@ -2,17 +2,20 @@
 #include "StateManager.h"
 #include "MenuState.h"
 #include "HighScoreState.h"
+#define _USE_MATH_DEFINES
+#include <math.h>
 #include <sstream>
+#include <windows.h>
 
 using namespace std;
 
 CPlayState::CPlayState(CStateManager* pManager)
  : CGameStateBase(pManager), m_pMatrix(NULL), m_pFont(NULL), 
    m_pComboControl(NULL), m_pScoreControl(NULL), 
-   m_pLevelControl(NULL), m_pLinesControl(NULL),
-   m_iTotalLines(0), m_iCurrentLevel(0), m_ulCurrentScore(0), 
-   m_bGameOver(false)
+   m_pLevelControl(NULL), m_pLinesControl(NULL)
 {
+	Reset();
+
 	AddFontResource("01 Digitall.ttf");
 	m_pMatrix = new CBlocksMatrix(NULL,280,34);
 	m_pFont = new CGameFont;
@@ -48,12 +51,36 @@ CPlayState* CPlayState::GetInstance(CStateManager* pManager)
 
 void CPlayState::Reset()
 {
-	m_iTotalLines = 0;
-	m_iCurrentLevel = 0; 
-	m_ulCurrentScore = 0;
-	m_bGameOver = false;
-	m_pMatrix->Reset();
-	m_pComboControl->Reset();
+	// TODO srand(GetTickCount());
+	m_curLevel = 1;
+	m_curScore = 0;
+
+	for (int i = 0; i < 3; i++)
+		AddRandomCircle();
+}
+
+void CPlayState::AddRandomCircle()
+{
+  TCircle newCircle;
+	double sizeMult = 1.0 / (1 + (m_curLevel - 1) / 10.0);
+	double speedMult = 1 + (m_curLevel - 1) / 5.0;
+	double radius = (0.1 + double(rand()) / RAND_MAX / 6.0) * sizeMult;
+
+	if (radius > 1)
+		radius = 1;
+	newCircle.radius = radius;
+	newCircle.y = 1 - radius;
+	newCircle.x = double(rand()) / RAND_MAX * (1 - radius);
+	newCircle.color = ((rand() * 128 / RAND_MAX + 128) << 16) +  // TODO: сделать превалирование цветов радуги или что-нибудь в этом духе
+		                ((rand() * 128 / RAND_MAX + 128) << 8) +
+										(rand() * 128 / RAND_MAX + 128);
+	newCircle.speedY = 0.1 / radius * speedMult;  
+	  // ѕо умолчанию кружок радиусом 1/10 игрового пол€ пройдЄт его за 9 секунд
+	m_circleSet.Add(newCircle);
+	// TODO: провер€ть коллизии
+	// TODO? было бы прикольно, если бы коллизии провер€лись и по ходу игры,
+	// но это надо мен€ть игровую механику - в задании написано "двигаютс€ без ускорени€"
+
 }
 
 void CPlayState::OnKeyDown(WPARAM wKey)
@@ -90,17 +117,23 @@ void CPlayState::OnKeyDown(WPARAM wKey)
 	}
 }
 
-void CPlayState::Update(DWORD dwCurrentTime)
+void CPlayState::Update(double dt)
 {
-	if (!m_bGameOver)
+	m_circleSet.MoveAll(dt);
+
+		if (!m_bGameOver)
 	{
-		m_pMatrix->Update(dwCurrentTime);
-		m_pComboControl->Update(dwCurrentTime);
+		m_pMatrix->Update(GetTickCount());
+		m_pComboControl->Update(GetTickCount());
 	}
+
 }
 
 void CPlayState::Draw()  
 { 
+	DrawCircles();
+
+
 	m_pMatrix->Draw();
 
 	stringstream ssScore;
@@ -143,6 +176,28 @@ void CPlayState::Draw()
 	//	m_pFont->DrawText("Press Enter to continue",285,300);
 	//}
 
+}
+
+void CPlayState::DrawCircles()
+{
+	const CCircleSet::TCircleList& circles = m_circleSet.GetCurCircles();
+
+	glDisable(GL_TEXTURE_2D);
+	glBegin(GL_LINE_STRIP);
+	for (CCircleSet::TCircleList::const_iterator it = circles.begin(); it != circles.end(); it++)
+	{
+		const TCircle& circle = *it;
+
+		glColor3i(circle.color, 100, 100);
+		for (int deg = 0; deg <= 360; deg += 30)
+		{
+			double x = circle.x + circle.radius * cos(double(deg) / 180 * M_PI);
+			double y = circle.y + circle.radius * 300 * sin(double(deg) / 180 * M_PI);
+
+			glVertex2f(x, y);
+		}
+	}
+	glEnd();
 }
 
 //void CPlayState::OnStartRemoveLines()

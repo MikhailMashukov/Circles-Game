@@ -27,10 +27,10 @@ void CStateManager::OnChar(WPARAM wChar)
 		m_pActiveState->OnChar(wChar);
 }
 
-void CStateManager::Update(DWORD dwCurrentTime)
+void CStateManager::Update(double dt)
 {
 	if (m_pActiveState)
-		m_pActiveState->Update(dwCurrentTime);
+		m_pActiveState->Update(dt);
 }
 
 void CStateManager::Draw()
