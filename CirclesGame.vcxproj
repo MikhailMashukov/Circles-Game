@@ -97,7 +97,7 @@
     <ClCompile Include="src\BlocksMatrix.cpp" />
     <ClCompile Include="src\ComboControl.cpp" />
     <ClCompile Include="src\GameFont.cpp" />
-    <ClCompile Include="src\GameState.cpp" />
+    <ClCompile Include="src\GameStateBase.cpp" />
     <ClCompile Include="src\HighScoreState.cpp" />
     <ClCompile Include="src\Image.cpp" />
     <ClCompile Include="src\ImageList.cpp" />
@@ -125,7 +125,7 @@
     <ClInclude Include="src\Constants.h" />
     <ClInclude Include="src\Exception.h" />
     <ClInclude Include="src\GameFont.h" />
-    <ClInclude Include="src\GameState.h" />
+    <ClInclude Include="src\GameStateBase.h" />
     <ClInclude Include="src\HighScoreState.h" />
     <ClInclude Include="src\Image.h" />
     <ClInclude Include="src\ImageList.h" />
