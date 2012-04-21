@@ -46,6 +46,7 @@ protected:
 private:
 	CCircleSet m_circleSet;
 	int m_curLevel, m_curScore;
+	int m_curLevelBlownCircleCount;
 
 	int m_windowWidth, m_windowHeight;
 	// The font used to draw text

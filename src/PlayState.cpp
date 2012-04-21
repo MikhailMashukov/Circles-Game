@@ -20,8 +20,8 @@ CPlayState::CPlayState(CStateManager* pManager)
 	m_pFont = new CGameFont;
 	m_pFont->CreateFont("01 Digitall", 20, FW_NORMAL);
 
-	m_pScoreControl = new CTextControl(m_pFont,TRectanglei(0, 100, 0, 200));
-	m_pScoreControl->SetAlignement(CTextControl::TACenter);
+	m_pScoreControl = new CTextControl(m_pFont,TRectanglei(0, 45, 20, 300));
+	m_pScoreControl->SetAlignement(CTextControl::TALeft);
 	m_pScoreControl->SetTextColor(1.0f,0.588f,0.039f);
 }
 
@@ -54,9 +54,10 @@ void CPlayState::OnSize(int width, int height)
 
 void CPlayState::InitNewGame()
 {
-	// TODO srand(GetTickCount());
+	srand(GetTickCount());
 	m_curLevel = 1;
 	m_curScore = 0;
+	m_curLevelBlownCircleCount = 0;
 
 	for (int i = 0; i < 3; i++)
 		AddRandomCircle();
@@ -80,9 +81,10 @@ void CPlayState::AddRandomCircle()
 	newCircle.radius = radius;
 	newCircle.y = m_circleSet.GetFieldHeight() - radius;
 	newCircle.x = double(rand()) / RAND_MAX * (1 - radius * 2) + radius / 2.0;
-	newCircle.color = ((rand() * 128 / RAND_MAX + 128) << 16) +  // TODO: сделать превалирование цветов радуги или что-нибудь в этом духе
-		                ((rand() * 128 / RAND_MAX + 128) << 8) +
-										(rand() * 128 / RAND_MAX + 128);
+	newCircle.color = RGB(rand() * 100 / RAND_MAX + 100,  
+		                    rand() * 155 / RAND_MAX + 100,
+												rand() * 128 / RAND_MAX + 128);
+	// TODO: сделать превалирование цветов радуги или что-нибудь в этом духе
 	newCircle.speedY = -0.005 / radius * speedMult;  
 	  // По умолчанию кружок диаметром 1/10 игрового поля пройдёт его за 9 секунд
 	  // (не за 10 потому что центр кружка проходит меньше, чем всё поле)
@@ -119,7 +121,7 @@ void CPlayState::Update(double dt)
 
 void CPlayState::Draw()  
 { 
-	// Рисуем игровое поле. Проекцируем на имеющееся окно прямоугольник
+	// Рисуем игровое поле. Проецируем на имеющееся окно прямоугольник
 	// (0, 0) - (1, m_circleSet.GetFieldHeight())
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
@@ -132,7 +134,7 @@ void CPlayState::Draw()
 	glLoadIdentity();
 	glOrtho(0, m_windowWidth, 0, m_windowHeight, -1.0, 1.0);
 	stringstream ssScore;
-	ssScore << m_curScore;
+	ssScore << "Your score:  " << m_curScore;
 	m_pScoreControl->SetText(ssScore.str());
 	m_pScoreControl->Draw();
 }
@@ -194,8 +196,8 @@ void CPlayState::DrawCircles()
 
 		int faceCount = int(m_windowWidth * r) / 8 * 4;
 
-		if (faceCount < 4)
-			faceCount = 4;
+		if (faceCount < 20)
+			faceCount = 20;
 
 		double angleStep = 2 * M_PI / faceCount;
 
@@ -221,5 +223,12 @@ void CPlayState::OnMouseLButtonDown(int x, int y)
 	if (m_circleSet.BlowCircleAtPoint(blownCircle, dx, dy))
 	{
 		m_curScore += int(0.1 / pow(blownCircle.radius, 1.5) * (1 + m_curLevel * 0.3) + 0.5);
+		if (m_curLevelBlownCircleCount <= m_curLevel * 2)
+			m_curLevelBlownCircleCount++;
+		else
+		{
+			m_curLevel++;
+			m_curLevelBlownCircleCount = 0;
+		}
 	}
 }
