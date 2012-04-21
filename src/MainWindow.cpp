@@ -1,7 +1,6 @@
 #include "MainWindow.h"
 #include "Exception.h"
 #include "PlayState.h"
-#include "MenuState.h"
 #include "GameFont.h"
 
 using namespace std;
@@ -82,6 +81,7 @@ CMainWindow::CMainWindow(int iWidth, int iHeight, bool bFullScreen)
 
 	m_pStateManager = new CStateManager;
 	m_pStateManager->ChangeState(CPlayState::GetInstance(m_pStateManager));
+	m_pStateManager->OnSize(iWidth, iHeight);
 }
 
 CMainWindow::~CMainWindow()
@@ -235,12 +235,17 @@ void CMainWindow::OnSize(GLsizei width, GLsizei height)
 	// an orthographic projection
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	if (width > 0)
-	{
-		glOrtho(0, 1, 1.0 - double(height) / width, 1, -1.0, 1.0);
-		if (m_pStateManager)
-			m_pStateManager->OnSize(width, height);
-	}
+
+	glOrtho(0.0,width,height,0.0,-1.0,1.0);
+	if (m_pStateManager)
+		m_pStateManager->OnSize(width, height);
+	//if (width > 0)
+	//{
+	//	glOrtho(0, 1, 1.0 - double(height) / width, 1, -1.0, 1.0);
+	//	if (m_pStateManager)
+	//		m_pStateManager->OnSize(width, height);
+	//}
+
 	glMatrixMode(GL_MODELVIEW);
 //	glDisable(GL_DEPTH_TEST);
 }

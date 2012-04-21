@@ -94,61 +94,27 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\Application.cpp" />
-    <ClCompile Include="src\BlocksMatrix.cpp" />
     <ClCompile Include="src\CircleSet.cpp" />
-    <ClCompile Include="src\ComboControl.cpp" />
     <ClCompile Include="src\GameFont.cpp" />
     <ClCompile Include="src\GameStateBase.cpp" />
-    <ClCompile Include="src\HighScoreState.cpp" />
-    <ClCompile Include="src\Image.cpp" />
-    <ClCompile Include="src\ImageList.cpp" />
     <ClCompile Include="src\Main.cpp" />
     <ClCompile Include="src\MainWindow.cpp" />
-    <ClCompile Include="src\MenuState.cpp" />
     <ClCompile Include="src\PlayState.cpp" />
     <ClCompile Include="src\StateManager.cpp" />
-    <ClCompile Include="src\Tetrad_I.cpp" />
-    <ClCompile Include="src\Tetrad_J.cpp" />
-    <ClCompile Include="src\Tetrad_L.cpp" />
-    <ClCompile Include="src\Tetrad_O.cpp" />
-    <ClCompile Include="src\Tetrad_S.cpp" />
-    <ClCompile Include="src\Tetrad_T.cpp" />
-    <ClCompile Include="src\Tetrad_Z.cpp" />
-    <ClCompile Include="src\TetradFactory.cpp" />
     <ClCompile Include="src\TextControl.cpp" />
-    <ClCompile Include="src\Texture.cpp" />
-    <ClCompile Include="src\TextureManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Application.h" />
-    <ClInclude Include="src\BlocksMatrix.h" />
     <ClInclude Include="src\CircleSet.h" />
-    <ClInclude Include="src\ComboControl.h" />
-    <ClInclude Include="src\Constants.h" />
     <ClInclude Include="src\Exception.h" />
     <ClInclude Include="src\GameFont.h" />
     <ClInclude Include="src\GameStateBase.h" />
-    <ClInclude Include="src\HighScoreState.h" />
-    <ClInclude Include="src\Image.h" />
-    <ClInclude Include="src\ImageList.h" />
     <ClInclude Include="src\MainWindow.h" />
-    <ClInclude Include="src\MenuState.h" />
     <ClInclude Include="src\PlayState.h" />
     <ClInclude Include="src\Rectangle.h" />
     <ClInclude Include="src\SmartPtr.h" />
     <ClInclude Include="src\StateManager.h" />
-    <ClInclude Include="src\Tetrad.h" />
-    <ClInclude Include="src\Tetrad_I.h" />
-    <ClInclude Include="src\Tetrad_J.h" />
-    <ClInclude Include="src\Tetrad_L.h" />
-    <ClInclude Include="src\Tetrad_O.h" />
-    <ClInclude Include="src\Tetrad_S.h" />
-    <ClInclude Include="src\Tetrad_T.h" />
-    <ClInclude Include="src\Tetrad_Z.h" />
-    <ClInclude Include="src\TetradFactory.h" />
     <ClInclude Include="src\TextControl.h" />
-    <ClInclude Include="src\Texture.h" />
-    <ClInclude Include="src\TextureManager.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

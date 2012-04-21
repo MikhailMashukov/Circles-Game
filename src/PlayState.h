@@ -5,11 +5,7 @@
 #include "CircleSet.h"
 #include "GameFont.h"
 
-
-#include "BlocksMatrix.h"
-#include "ComboControl.h"
-#include "TextControl.h"
-
+class CTextControl;
 class CPlayState : public CGameStateBase
 {
 	// В этом классе реализована основная логика игры - обработка событий,
@@ -48,32 +44,12 @@ private:
 	CCircleSet m_circleSet;
 	int m_curLevel, m_curScore;
 
-
-
-	// The blocks matrix class
-	CBlocksMatrix* m_pMatrix;
+	int m_windowWidth, m_windowHeight;
 	// The font used to draw text
 	CGameFont* m_pFont;
-	// The control in charge of the decreasing 
-	// time for the combo score.
-	CComboControl* m_pComboControl;
-
 	// The text controls to display the current
 	// information.
 	CTextControl* m_pScoreControl;
-	CTextControl* m_pLevelControl;
-	CTextControl* m_pLinesControl;
-
-	// The current number of lines completed
-	int m_iTotalLines;
-	// The current level
-	int m_iCurrentLevel;
-	// The current score
-	ULONG m_ulCurrentScore;
-
-	bool m_bGameOver;
-
-	// The background image
 };
 
 #endif  // _PLAYSTATE_H_
