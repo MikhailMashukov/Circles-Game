@@ -1,6 +1,8 @@
 #include "Circle.h"
 #include <assert.h>
 
+const double TCircle::c_disappearTime = 0.5;
+
 TCircle::TCircle()
 	: state(csFalling)
 {
@@ -25,7 +27,7 @@ void TCircle::Update(double dt)
 		case csDisappearing:
 			{
 				curStateTime += dt;
-				if (curStateTime >= 0.5)
+				if (curStateTime >= c_disappearTime)
 					state = csDisappeared;
 			}
 			break;

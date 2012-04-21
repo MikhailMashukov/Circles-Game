@@ -1,6 +1,7 @@
 #include "PlayState.h"
 #include "StateManager.h"
 #include "TextControl.h"
+#include <assert.h>
 #define _USE_MATH_DEFINES
 #include <math.h>
 #include <sstream>
@@ -103,7 +104,10 @@ void CPlayState::Update(double dt)
 {
 	m_circleSet.MoveAll(dt);
 
-	m_curScore++; //d_
+	  // Вероятность такова, что на первом уровне сложности должен появляться
+	  // примерно один круг в секунду
+	if (rand() < RAND_MAX * dt * m_curLevel)
+		AddRandomCircle();
 }
 
 void CPlayState::Draw()  
@@ -148,14 +152,44 @@ void CPlayState::DrawCircles()
 	for (CCircleSet::TCircleList::const_iterator it = circles.begin(); it != circles.end(); it++)
 	{
 		const TCircle& circle = *it;
+		double r = circle.radius;
 
 		glBegin(GL_TRIANGLE_FAN);
-		glColor3ub(GetRValue(circle.color), GetGValue(circle.color), GetBValue(circle.color));
+		switch (circle.state)
+		{
+			case TCircle::csFalling:
+				glColor3ub(GetRValue(circle.color), GetGValue(circle.color), GetBValue(circle.color));
+				break;
+
+			case TCircle::csBlowing:
+				{
+					double mult = 1 + pow(1.0 - circle.curStateTime / TCircle::c_disappearTime, 4);
+
+					r *= pow(1.0 - circle.curStateTime / TCircle::c_disappearTime, 2);
+					glColor3d(GetRValue(circle.color) * mult, 
+						        GetGValue(circle.color) * mult, 
+										GetBValue(circle.color) * mult);
+				}
+				break;
+
+			case TCircle::csDisappearing:
+				{
+					double alpha = 255.0 / (1 + pow(circle.curStateTime / TCircle::c_disappearTime, 2));
+
+					glColor4ub(GetRValue(circle.color), GetGValue(circle.color), GetBValue(circle.color),
+										 GLubyte(alpha));
+				}
+				break;
+
+			default:
+				assert(0);
+		}
+
 		glVertex2d(circle.x, circle.y);
 		for (int deg = 0; deg <= 360; deg += 30)
 		{
-			double x = circle.x + circle.radius * cos(double(deg) / 180 * M_PI);
-			double y = circle.y + circle.radius * sin(double(deg) / 180 * M_PI);
+			double x = circle.x + r * cos(double(deg) / 180 * M_PI);
+			double y = circle.y + r * sin(double(deg) / 180 * M_PI);
 
 			glVertex2d(x, y);
 		}

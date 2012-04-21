@@ -1,12 +1,18 @@
 #ifndef _CIRCLE_H_
 #define _CIRCLE_H_
 
-struct TCircle  // TODO? выделить в отдельный файл
+#include <Windows.h>
+
+struct TCircle 
 {
 	// Хранилище состояния круга. Реализует только самые примитивные операции.
-	// TODO: разбить на два класса. Написать, что по-хорошему, класс игрового мира
-	// (в нашем случае CCircleSet) должен работать с базовыми объектами.
-	// Но это потребует использование smart pointer'ов
+	// TODO: разбить на два класса. По-хорошему, класс игрового мира
+	// (в нашем случае CCircleSet) должен работать с базовыми объектами,
+	// а объекты классов-потомков - знать про OpenGL и уметь себя рисовать.
+	// Однако это усложнит код, потребует использование smart pointer'ов и т.п.
+	// В данном случае проще и удобнее оставить рисование в PlayState.cpp.
+
+	static const double c_disappearTime;  // Время взрыва и исчезновения круга, в секундах
 
 	enum TState
 	{
@@ -25,7 +31,7 @@ struct TCircle  // TODO? выделить в отдельный файл
 	                       // шириной 1 и высотой fieldHeight
 	double radius;
 	double speedY;
-	int color;    // TODO: COLORREF
+	COLORREF color; 
 
 	TCircle();
 	void Update(double dt);

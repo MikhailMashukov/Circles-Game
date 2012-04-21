@@ -61,8 +61,12 @@ void CApplication::Run()
 		}
 		QueryPerformanceCounter(&curTime);
 
-		mainWindow.Update(double(curTime.QuadPart - prevUpdateTime.QuadPart) /
-			double(timerFreq.QuadPart));
+		double dt = double(curTime.QuadPart - prevUpdateTime.QuadPart) /
+			double(timerFreq.QuadPart);
+
+		if (dt > 1.0 / c_maxFrameRate)
+			dt = 1.0 / c_maxFrameRate;
+		mainWindow.Update(dt);
 		prevUpdateTime = curTime;
 		// Draw the main window
 		mainWindow.Draw();
