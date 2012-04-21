@@ -3,7 +3,9 @@
 
 #include "GameStateBase.h"
 
-// Manages the different states of the game.
+// Объект класса CMainWindow общается с объектом этого класса, 
+// а последний отслеживает текущий режим игры и передаёт
+// события объекту, отвечающему за текущий режим
 class CStateManager
 {
 public:

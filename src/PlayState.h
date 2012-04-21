@@ -6,6 +6,7 @@
 #include "GameFont.h"
 
 class CTextControl;
+
 class CPlayState : public CGameStateBase
 {
 	// В этом классе реализована основная логика игры - обработка событий,
@@ -24,13 +25,7 @@ public:
 	void Update(double dt);
 	void Draw();
 
-	// Implementation of the CMatrixEventsListener class
-	//void OnStartRemoveLines();
-	//void OnLinesRemoved(int iLinesCount);
-	//void OnMatrixFull();
-
 	void Reset();
-//	bool IsGameOver()  { return m_bGameOver; }
 
 	// Returns the single instance
 	static CPlayState* GetInstance(CStateManager* pManager);

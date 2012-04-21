@@ -5,6 +5,7 @@
 
 // The application class, which simply wraps the message queue and process
 // the command line.
+// Создаёт объект CMainWindow и общается с ним
 class CApplication
 {
 public:

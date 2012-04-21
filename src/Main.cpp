@@ -1,6 +1,8 @@
 #include "Application.h" 
 #include "Exception.h"
 
+// Модуль верхнего уровня
+
 int WINAPI WinMain(HINSTANCE Instance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, INT)
 {
 	hPrevInstance;
