@@ -23,7 +23,7 @@ CPlayState::CPlayState(CStateManager* pManager)
 	m_pFont->CreateFont("01 Digitall", 20, FW_NORMAL);
 
 	m_pComboControl = new CComboControl(TRectanglei(330,450,50,235),m_pFont);
-	m_pScoreControl = new CTextControl(m_pFont,TRectanglei(145,210,620,730));
+	m_pScoreControl = new CTextControl(m_pFont,TRectanglei(0.85, 0.95, 0.05, 0.3));
 	m_pScoreControl->SetAlignement(CTextControl::TACenter);
 	m_pScoreControl->SetTextColor(1.0f,0.588f,0.039f);
 }
@@ -48,6 +48,11 @@ CPlayState* CPlayState::GetInstance(CStateManager* pManager)
 {
 	static CPlayState Instance(pManager);
 	return &Instance;
+}
+
+void CPlayState::OnSize(int width, int height) 
+{
+	m_circleSet.SetFieldHeight(double(height) / width);
 }
 
 void CPlayState::InitNewGame()
@@ -201,8 +206,8 @@ void CPlayState::DrawCircles()
 		glVertex2f(circle.x, circle.y);
 		for (int deg = 0; deg <= 360; deg += 30)
 		{
-			double x = circle.x + circle.radius * 2* cos(double(deg) / 180 * M_PI);
-			double y = circle.y + circle.radius * 300 * sin(double(deg) / 180 * M_PI);
+			double x = circle.x + circle.radius * cos(double(deg) / 180 * M_PI);
+			double y = circle.y + circle.radius * sin(double(deg) / 180 * M_PI);
 
 			glVertex2f(x, y);
 		}

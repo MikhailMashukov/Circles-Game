@@ -13,8 +13,8 @@ struct TCircle  // TODO? выделить в отдельный файл
 	enum TState
 	{
 		csFalling,
-		csBlowing,       // По кругу кликнули и он взрывается
-		csDisappearing   // Круг дошёл до низа и исчезает
+		csBlowing,           // По кругу кликнули и он взрывается
+		csDisappearing       // Круг дошёл до низа и исчезает
 	};
 
 	TState state;
@@ -22,8 +22,8 @@ struct TCircle  // TODO? выделить в отдельный файл
 	                       // Используется только для состояний csBlowing и csDisappearing
   double x, y;           // Координаты центра. 
 	                       // Игровые объекты находятся в своих координатах -
-	                       // внутри квадрата с левым нижним углом в центре координат
-	                       // и размером 1
+	                       // внутри прямоугольника с левым нижним углом в центре координат,
+	                       // шириной 1 и высотой fieldHeight
 	double radius;
 	double speedY;
 	int color;    // TODO: COLORREF
@@ -40,9 +40,7 @@ public:
 	CCircleSet();
 	virtual ~CCircleSet();
 
-	// TODO? void SetAspectRatio   По-хорошему, при изменении размера окна, 
-	// должно меняться соотношение сторон игрового поля, кружки должны начинать
-	// исчезать раньше или позже... Пока у нас игровое поле квадратное
+	void SetFieldHeight(double fieldHeight);
 	void Add(const TCircle& circle);
 //	bool AddRandomCircle(double sizeMult = 1, double speedMult = 1);
 	            // CCircleSet имеет свою логику случайного выбора размера нового кружка,
@@ -66,6 +64,7 @@ public:
 	            // удалеления объекта CCircleSet
 
 protected:
+	double m_fieldHeight;
 	TCircleList m_circles, m_deletedCircles;
 };
 

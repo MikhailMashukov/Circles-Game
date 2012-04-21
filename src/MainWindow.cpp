@@ -11,7 +11,8 @@ using namespace std;
 
 CMainWindow::CMainWindow(int iWidth, int iHeight, bool bFullScreen) 
   :  m_hWindow(NULL), m_hDeviceContext(NULL), m_hGLContext(NULL), 
-     m_bFullScreen(bFullScreen)
+     m_bFullScreen(bFullScreen),
+		 m_pStateManager(NULL)
 {
 	RegisterWindowClass();
 
@@ -228,15 +229,20 @@ void CMainWindow::InitGL()
 void CMainWindow::OnSize(GLsizei width, GLsizei height)
 {
 	// Sets the size of the OpenGL viewport
-    glViewport(0,0,width,height);
+	glViewport(0,0,width,height);
 
 	// Select the projection stack and apply 
 	// an orthographic projection
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	glOrtho(0.0,width,height,0.0,-1.0,1.0);
+	if (width > 0)
+	{
+		glOrtho(0, 1, 1.0 - double(height) / width, 1, -1.0, 1.0);
+		if (m_pStateManager)
+			m_pStateManager->OnSize(width, height);
+	}
 	glMatrixMode(GL_MODELVIEW);
-	glDisable(GL_DEPTH_TEST);
+//	glDisable(GL_DEPTH_TEST);
 }
 
 void CMainWindow::Update(double dt)

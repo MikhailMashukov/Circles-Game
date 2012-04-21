@@ -26,6 +26,7 @@ public:
 
 	// 'Events' function, they are simply redirected to
 	// the active state.
+	void OnSize(int width, int height);
 	void OnKeyDown(WPARAM wKey);
 	void OnKeyUp(WPARAM wKey);
 	void OnChar(WPARAM wChar);

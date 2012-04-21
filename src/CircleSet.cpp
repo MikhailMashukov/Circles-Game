@@ -8,6 +8,11 @@ CCircleSet::~CCircleSet()
 {
 }
 
+void CCircleSet::SetFieldHeight(double fieldHeight)
+{
+	m_fieldHeight = fieldHeight;
+}
+
 void CCircleSet::Add(const TCircle& circle)
 {
 	m_circles.push_back(circle);

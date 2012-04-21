@@ -28,7 +28,7 @@ private:
 	void InitGL();
 
 	// Called when a WM_SIZE message is received
-	void OnSize(GLsizei width, GLsizei height);
+	void OnSize(int width, int height);
 
 	// Static function which will be the window procedure callback
     static LRESULT CALLBACK OnEvent(HWND Handle, UINT Message, WPARAM wParam, LPARAM lParam);

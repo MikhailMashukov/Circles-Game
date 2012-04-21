@@ -21,8 +21,9 @@ public:
 		TARight
 	};
 
-	void SetText(const std::string& strText)  { m_strText = strText; }
-	void SetAlignement(ETextAlignement Alignement) { m_Alignement = Alignement; }
+	void SetText(const std::string& strText)           { m_strText = strText; }
+	void SetPosition(const TRectanglei& rectPosition)  { m_rectPosition = rectPosition; }
+	void SetAlignement(ETextAlignement Alignement)     { m_Alignement = Alignement; }
 	void Draw();
 	void SetTextColor(GLfloat fRed, GLfloat fGreen, GLfloat fBlue);
 

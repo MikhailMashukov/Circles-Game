@@ -9,6 +9,12 @@ CStateManager::~CStateManager()
 {
 }
 
+void CStateManager::OnSize(int width, int height)
+{
+	if (m_pActiveState)
+		m_pActiveState->OnSize(width, height);
+}
+
 void CStateManager::OnKeyDown(WPARAM wKey)
 {
 	if (m_pActiveState)
